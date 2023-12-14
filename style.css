@@ -1,0 +1,21 @@
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.board{
+    display: grid;
+    grid-template: repeat(3,1fr)/ repeat(3,1fr);
+    width: 400px;
+    height: 400px;
+}
+.cell{
+    font-size: 2rem;
+    border: 1px solid black;
+    cursor: pointer;
+}
+.result{
+    display: none;
+}
