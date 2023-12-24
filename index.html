@@ -5,19 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tak Toe</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/7f33e8970d.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <div class="container">
-        <div class="turn-mssg"></div>
-        <div class="board"></div>
-        <div class="result">
-            <p></p>
-            <button class="replay">Replay</button>
+    <main>
+        <audio class="bttn-click-sound" src="./sound/bttn-click.mp3"></audio>
+        <div class="container">
+            <div class="player-div-gamepage top-left">
+                <div class="team">Team <span>X</span></div>
+                <div class="player-info">
+                    <div class="player-img gamepage">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="name-and-win">
+                        <div class="name">
+                            Player1
+                        </div>
+                        <div class="wins">
+                            Wins: <span>0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="player-div-gamepage top-right">
+                <div class="team">Team <span>O</span></div>
+                <div class="player-info">
+                    <div class="name-and-win">
+                        <div class="name">
+                            Player2
+                        </div>
+                        <div class="wins">
+                            Wins: <span>0</span>
+                        </div>
+                    </div>
+                    <div class="player-img gamepage">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="gameboard-container">
+                <div class="board"></div>
+                <div class="mssg-container">
+                    <p class="turn-mssg"></p>
+                    <div class="replay-exit-container">
+                        <button class="replay"><i class="fa-solid fa-arrow-rotate-left"></i>Replay</button>
+                        <button class="exit">Exit</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-    </div>
+        <div class="initial-form">
+            <h1 class="heading">Tic Tak T<span></span>e</h1>
+            <form action="">
+                <div class="players-container">
+                    <span class="vs">Vs</span>
+                    <div class="player-div">
+                        <div class="player-img">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <input required maxlength="20" type="text" class="player-name player1" value="Player1" placeholder="Enter Player1 Name">
+                    </div>
+                    <div class="player-div">
+                        <div class="player-img">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <input required maxlength="20" type="text" class="player-name player2" value="Player2" placeholder="Enter Player1 name">
+                    </div>
+                </div>
+                <button type="submit" class="play">Play</button>
+            </form>
+        </div>
+        
+        <dialog class="result-modal">
+            <button>+</button>
+            <p class="result-mssg"></p>
+        </dialog>
+    </main>
 
-    <script src="script.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
