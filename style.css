@@ -196,7 +196,7 @@ main{
 }
 .heading{
     font-family: var(--ff-kaushan-script);
-    font-size: 6rem;
+    font-size: clamp(4rem, 15vw, 6rem);
     position: fixed;
     top: 2rem;
 }
