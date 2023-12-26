@@ -76,7 +76,7 @@ main{
 }
 .player-img{
     background-color: rgb(226, 224, 224);
-    aspect-ratio: 4/3.5;
+    aspect-ratio: 4/4;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -237,45 +237,48 @@ form{
     align-items: center;
 }
 .players-container{
-    width: clamp(300px, 60vw, 600px);
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: clamp(1rem, 3vw, 2rem);
-    position: relative;
+    display: none;
 }
-.vs{
-    position: absolute;
-    font-family: var(--ff-permanent-marker);
+.computer-human .player2 {
+    display: none;
+}
+.selected{
+    display: block;
+}
+.play-against-container,
+.play-against,
+.players-container input{
+    font-size: clamp(0.8rem, 2vw, 1rem)
+}
+.play-against{
+    width: min(40vw,300px); 
+    padding: clamp(0.1rem, 1vw, 0.5rem) 1rem;
+    background-color: black;
+    border: none;
+    color: white;
+    margin-left: min(1vw, 1rem);
+}
+.players-container{
+    width: min(40vw,300px);
+    margin-top: 1rem;
+}
+.players-container input{
+    width: 100%;
+    padding: clamp(0.1rem, 1vw, 0.5rem) 1rem;
+    border-radius: 1rem;
+    border: 1px solid black;
+    outline: none;
+    
+}
+.player-name-label{
+    margin-top: 0.5rem;
+}
+.player-name-label,
+.error-mssg{
+    font-size: clamp(0.6rem, 2vw ,0.8rem );
+}
+.error-mssg{
     color: red;
-    text-shadow: 5px 5px 10px black;
-    font-size: clamp(3.5rem,12vw,8rem);
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-20deg);
-}
-.player-div{
-    width: 100%;
-}
-
-/* rest profile styles above  */
-.players-container .player-img{
-    width: 100%;
-    margin-bottom: 1rem;
-}
-.players-container .player-img i{
-    font-size: clamp(140px, 25vw, 280px);
-}
-.player-name{
-    width: 100%;
-    box-sizing: border-box;
-    font-size: clamp(0.8rem, 2vw, 1rem);
-    padding-top: min(0.5rem,1vw);
-    padding-bottom: min(0.5rem,1vw);
-    text-align: center;
-}
-input:valid{
-    outline: 2px solid green;
-}
-input:invalid{
-    outline: 2px solid red;
+    font-style: italic;
+    display: none;
 }

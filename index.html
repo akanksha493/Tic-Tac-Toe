@@ -16,7 +16,8 @@
                 <div class="team">Team <span>X</span></div>
                 <div class="player-info">
                     <div class="player-img gamepage">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-solid"></i>
+                        <!-- <i class="fa-solid fa-user"></i> -->
                     </div>
                     <div class="name-and-win">
                         <div class="name">
@@ -40,7 +41,8 @@
                         </div>
                     </div>
                     <div class="player-img gamepage">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-solid"></i>
+                        <!-- <i class="fa-solid fa-user"></i> -->
                     </div>
                 </div>
             </div>
@@ -59,24 +61,34 @@
         <div class="initial-form">
             <h1 class="heading">Tic Tak T<span></span>e</h1>
             <form action="">
-                <div class="players-container">
-                    <span class="vs">Vs</span>
-                    <div class="player-div">
-                        <div class="player-img">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <input required maxlength="20" type="text" class="player-name player1" value="Player1" placeholder="Enter Player1 Name">
-                    </div>
-                    <div class="player-div">
-                        <div class="player-img">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <input required maxlength="20" type="text" class="player-name player2" value="Player2" placeholder="Enter Player1 name">
-                    </div>
+                <div class="play-against-container">
+                    <label class="play-against-label" for="play-against">Play Against</label>
+                    <select name="play-against" id="play-against" class="play-against">
+                        <option selected value="machine">Machine</option>
+                        <option value="human">Human</option>
+                    </select>
+                </div>
+                <div data-selected-type="ch" class="players-container computer-human selected">
+                    <label class="player-name-label" for="human-name">Human Name</label>
+                    <input required type="text" id="human-name" class="playerName player1" value="Human" placeholder="Enter Your Name Human!">
+                    <p class="error-mssg">Player Name Missing</p>
+
+                    <input type="text" class="playerName player2" value="Machine">
+                    <p class="error-mssg">Player Name Missing</p>
+                </div>
+                <div data-selected-type="hh" class="players-container human-human">
+                    <label class="player-name-label" for="player1-name">Player1 Name</label>
+                    <input required type="text" id="player1-name" class="playerName player1" value="Player1" placeholder="Enter Player1 Name">
+                    <p class="error-mssg">Player Name Missing</p>
+
+                    <label class="player-name-label" for="player2-name">Player2 Name</label>
+                    <input required type="text" id="player2-name" class="playerName player2" value="Player2" placeholder="Enter Player2 Name">
+                    <p class="error-mssg">Player Name Missing</p>
                 </div>
                 <button type="submit" class="play">Play</button>
             </form>
         </div>
+        
         
         <dialog class="result-modal">
             <button>+</button>

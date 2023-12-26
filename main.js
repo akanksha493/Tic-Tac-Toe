@@ -95,12 +95,32 @@ class Player{
 }
 
 
-var colorsArray = ["#33658a", "#86bbd8", "#758e4f", "#f6ae2d", "#f26419" ];
+var validMoves = [];
+function resetValidMoves(){
+    validMoves = [];
+    for(let i=0;i<3;i++){
+        for(let j=0;j<3;j++){
+            validMoves.push([i,j]);
+        }
+    }
+}
+resetValidMoves();
+
+const colorsArray = ["#33658a", "#86bbd8", "#758e4f", "#f6ae2d", "#f26419" ];
 
 function ScreenController(name1, name2){
     const player1 = new Player(name1, "X", "rgb(175, 4, 4)");
     const player2 = new Player(name2, "O", "rgb(7, 10, 82)");
     const gc = GameController(player1, player2);
+    const gameType = document.querySelector(".selected").dataset.selectedType;
+    if(gameType === "hh"){
+        document.querySelector(".top-left .player-img i").classList.add("fa-user");
+        document.querySelector(".top-right .player-img i").classList.add("fa-user");
+    }
+    else{
+        document.querySelector(".top-left .player-img i").classList.add("fa-user");
+        document.querySelector(".top-right .player-img i").classList.add("fa-robot");
+    }
     document.querySelector(".top-left .name").textContent = name1;
     document.querySelector(".top-right .name").textContent = name2;
     document.querySelector(".top-left .wins span").textContent = "0";
@@ -110,10 +130,12 @@ function ScreenController(name1, name2){
     replay_exit_Container.style.display = "none";
     turnMessage.style.display = "block";
     const boardDiv = document.querySelector(".board");
+    boardDiv.style.pointerEvents = "auto";
+    resetValidMoves();
     const resultMessage = document.querySelector(".result-mssg");
     const modal = document.querySelector(".result-modal");
-    const closeModal = document.querySelector(".result-modal button");
-    closeModal.addEventListener("click", ()=>{
+    const closeModalBttn = document.querySelector(".result-modal button");
+    closeModalBttn.addEventListener("click", ()=>{
         modal.close();
     })
     
@@ -131,6 +153,7 @@ function ScreenController(name1, name2){
         playAudio(bttnClick);
         gc.replay();
         createBoard();
+        resetValidMoves();
         turnMessage.textContent = `${gc.getActivePlayer().name}'s Turn`;
         replay_exit_Container.style.display = "none";
         turnMessage.style.display = "block";
@@ -150,11 +173,36 @@ function ScreenController(name1, name2){
             }
         }
     }
-    const updateScreen = (x =-1, y=-1, cell, result, markerColor)=>{
+    const findCell = (x, y) =>{
+        //find cell from x, y 
+        const cells = document.querySelectorAll(".cell");
+        let selected = null;
+        cells.forEach(cell => {
+            if((parseInt(cell.dataset.row)===x) && (parseInt(cell.dataset.column)===y)){
+                selected = cell;
+            }
+        })
+        return selected;
+    }
+    const findIndex = (row,col) =>{
+        let index = -1;
+        for(let i=0;i<validMoves.length;i++){
+            if((validMoves[i][0]===row) && (validMoves[i][1]===col)){
+                index = i;
+            }
+        }
+        return index;
+    }
+    const updateScreen = (x =-1, y=-1, cell)=>{
+        if((x===-1) || (y===-1)){ 
+            turnMessage.textContent = `${gc.getActivePlayer().name}'s Turn`;
+            return;
+        }
         const board = gc.getBoard();
+        const markerColor = gc.getActivePlayer().color;
+        const result = gc.play(x, y);
         const activePlayer = gc.getActivePlayer();
         turnMessage.textContent = `${activePlayer.name}'s Turn`;
-        if((x===-1) || (y===-1)) return;
         cell.textContent = board[x][y];
         cell.style.color = markerColor;
         cell.style.pointerEvents = "none";
@@ -182,13 +230,18 @@ function ScreenController(name1, name2){
             modal.showModal();
             resultMessage.style.color = random_color;
         }
+        else if(result===0 && activePlayer===player2 && gameType==="ch"){
+            const randomSelection = validMoves[Math.floor(Math.random()*validMoves.length)];
+            validMoves.splice(findIndex(randomSelection[0], randomSelection[1]),1);
+            const selectedCell = findCell(randomSelection[0], randomSelection[1]);
+            updateScreen(randomSelection[0], randomSelection[1], selectedCell);
+        }
     }
     function clickHandler(e){
         const row = parseInt(e.target.dataset.row);
         const col = parseInt(e.target.dataset.column);
-        const color = gc.getActivePlayer().color;
-        const result = gc.play(row, col);
-        updateScreen(row, col, e.target, result, color);
+        const x = validMoves.splice(findIndex(row,col),1);
+        updateScreen(row, col, e.target);
     }
     createBoard();
     updateScreen();
@@ -198,12 +251,31 @@ function ScreenController(name1, name2){
 function playScreenLoader(e){
     playAudio(bttnClick);
     e.preventDefault();
-    const player1name = document.querySelector(".player1").value;
-    const player2name = document.querySelector(".player2").value;
+    const player1 = document.querySelector(".selected .player1");
+    const player2 = document.querySelector(".selected .player2");
+    if((!player1.validity.valueMissing) && (!player2.validity.valueMissing)){
+        document.querySelector(".selected .player1 ~ .error-mssg").style.display = "none";
+        document.querySelector(".selected .player2 ~ .error-mssg").style.display = "none";
+        ScreenController(player1.value, player2.value);
+        initialPage.style.display = "none";
+        playBoardContainer.style.display = "flex";
+    }
+    else{
+        if(player1.validity.valueMissing){
+            document.querySelector(".selected .player1 ~ .error-mssg").style.display = "block";
+        }
+        else{
+            document.querySelector(".selected .player1 ~ .error-mssg").style.display = "none";
+        }
+        if(player2.validity.valueMissing){
+            document.querySelector(".selected .player2 ~ .error-mssg").style.display = "block";
+        }
+        else{
+            document.querySelector(".selected .player2 ~ .error-mssg").style.display = "none";
+        }
+    }
 
-    ScreenController(player1name, player2name);
-    initialPage.style.display = "none";
-    playBoardContainer.style.display = "flex";
+    
 
 
 }
@@ -217,8 +289,27 @@ function initialRenderPage(){
 function playAudio(audio){
     audio.play();
 }
+function toggleSelected(){
+    if(selectedOppositeTeam.value === "machine"){
+        humanHuman.classList.remove("selected");
+        computerHuman.classList.add("selected");
+    }
+    else if(selectedOppositeTeam.value === "human"){
+        computerHuman.classList.remove("selected");
+        humanHuman.classList.add("selected");
+    }
+}
 
+const bttnClick = document.querySelector(".bttn-click-sound");
 const playBoardContainer = document.querySelector(".container");
 const initialPage = document.querySelector(".initial-form");
+const selectedOppositeTeam = document.querySelector(".play-against");
+const computerHuman = document.querySelector(".computer-human");
+const humanHuman = document.querySelector(".human-human");
+selectedOppositeTeam.addEventListener("change", toggleSelected )
+
+
 initialRenderPage();
-const bttnClick = document.querySelector(".bttn-click-sound");
+toggleSelected();
+
+
